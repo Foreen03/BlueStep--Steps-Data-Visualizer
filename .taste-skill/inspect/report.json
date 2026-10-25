@@ -1,6 +1,6 @@
 {
  "url": "http://localhost:5173/",
- "at": "2026-10-25T03:26:04.427Z",
+ "at": "2026-10-25T03:33:31.373Z",
  "allow": [],
  "viewports": [
   {
@@ -27,9 +27,9 @@
      "h": 900
     },
     "page": {
-     "height": 2072,
+     "height": 2058,
      "screens": 2.3,
-     "words": 340,
+     "words": 345,
      "img": 0,
      "video": 0,
      "canvas": 0,
@@ -180,23 +180,23 @@
       "kind": "heading"
      },
      {
-      "text": "1",
+      "text": "1.0",
       "words": 1,
-      "chars": 1,
+      "chars": 3,
       "lines": 1,
-      "size": 48,
-      "vw": 3.3,
+      "size": 36,
+      "vw": 2.5,
       "font": "IBM Plex Sans",
       "weight": 600,
-      "tracking": 0,
-      "leading": 1,
+      "tracking": -0.025,
+      "leading": 1.11,
       "upper": false,
       "italic": false,
       "mono": false,
       "align": "center",
       "position": "left",
-      "widthRatio": 0.02,
-      "top": 1175,
+      "widthRatio": 0.04,
+      "top": 1228,
       "tag": "span",
       "kind": "heading"
      }
@@ -214,12 +214,12 @@
      "families": [
       {
        "family": "IBM Plex Sans",
-       "share": 0.94,
+       "share": 0.93,
        "mono": false
       },
       {
        "family": "IBM Plex Mono",
-       "share": 0.06,
+       "share": 0.07,
        "mono": true
       }
      ],
@@ -232,7 +232,7 @@
       18,
       24,
       30,
-      48
+      36
      ],
      "sizeCount": 8,
      "notLoaded": [],
@@ -246,30 +246,30 @@
      },
      "measureChars": 110,
      "max": {
-      "size": 48,
-      "vw": 3.3,
+      "size": 36,
+      "vw": 2.5,
       "font": "IBM Plex Sans",
-      "text": "1"
+      "text": "1.0"
      },
-     "monoShare": 0.06,
-     "monoProseShare": 0.06,
+     "monoShare": 0.07,
+     "monoProseShare": 0.07,
      "monoFamilies": [
       "IBM Plex Mono"
      ],
      "monoSamples": [
       "Scope: step_logs_20261025_103455.txt",
+      "sps",
+      "60 SPM • 1 steps",
+      "(1 SPS)",
       "00:00 (0s)",
-      "01:18 (78s total)",
-      "1x",
-      "2x",
-      "4x"
+      "01:18 (78s total)"
      ],
      "microLabels": 0,
      "microLabelShare": 0,
      "microSamples": [],
      "upperShare": 0.05,
      "centerShare": 0.16,
-     "smallText": 8
+     "smallText": 7
     },
     "eyebrows": [
      {
@@ -321,16 +321,6 @@
       "pill": false,
       "size": 14,
       "top": 210
-     },
-     {
-      "text": "Current cadence",
-      "above": "1",
-      "upper": false,
-      "tracked": false,
-      "mono": false,
-      "pill": false,
-      "size": 13,
-      "top": 1154
      }
     ],
     "numbered": [],
@@ -428,7 +418,7 @@
       "div.flex.flex-col 1232px",
       "div.border-b.border-border 1232px",
       "div.flex.flex-col 1182px",
-      "div.flex.items-center 1182px"
+      "div.flex.flex-wrap 1182px"
      ],
      "outlinedBoxes": 13,
      "dashed": 0,
@@ -444,7 +434,7 @@
        "count": 3,
        "iconTopped": false,
        "rounded": true,
-       "top": 1792
+       "top": 1779
       }
      ]
     },
@@ -471,7 +461,7 @@
      "w": 1440,
      "h": 900
     },
-    "pageH": 2072,
+    "pageH": 2058,
     "margins": {
      "left": 104,
      "right": 113
@@ -504,8 +494,8 @@
       "sel": "div.group/tabs.flex",
       "tag": "div",
       "top": 345,
-      "height": 1654,
-      "words": 192,
+      "height": 1641,
+      "words": 193,
       "media": 3,
       "middle": 0,
       "heading": {
@@ -593,7 +583,7 @@
      "align": "left",
      "position": "left"
     },
-    "charts": 2,
+    "charts": 3,
     "layout": {
      "panels": 5,
      "firstScreen": 2,
@@ -636,15 +626,15 @@
     "numbers": {
      "cells": 0,
      "leftAligned": 0,
-     "figures": 20,
-     "tabularShare": 0.8,
-     "kpiMax": 30
+     "figures": 21,
+     "tabularShare": 0.81,
+     "kpiMax": 36
     },
     "rows": null,
     "chartHues": 4,
     "placeholders": [],
     "type": {
-     "under13": 0.18,
+     "under13": 0.14,
      "tiny": 0,
      "tinySamples": [],
      "sizes": [
@@ -655,7 +645,8 @@
       16,
       18,
       24,
-      30
+      30,
+      36
      ]
     },
     "title": {
@@ -691,9 +682,9 @@
      "h": 1024
     },
     "page": {
-     "height": 2910,
+     "height": 2896,
      "screens": 2.8,
-     "words": 329,
+     "words": 334,
      "img": 0,
      "video": 0,
      "canvas": 0,
@@ -844,23 +835,23 @@
       "kind": "heading"
      },
      {
-      "text": "1",
+      "text": "1.0",
       "words": 1,
-      "chars": 1,
+      "chars": 3,
       "lines": 1,
-      "size": 48,
-      "vw": 6.3,
+      "size": 36,
+      "vw": 4.7,
       "font": "IBM Plex Sans",
       "weight": 600,
-      "tracking": 0,
-      "leading": 1,
+      "tracking": -0.025,
+      "leading": 1.11,
       "upper": false,
       "italic": false,
       "mono": false,
       "align": "center",
       "position": "left",
-      "widthRatio": 0.04,
-      "top": 1532,
+      "widthRatio": 0.07,
+      "top": 1585,
       "tag": "span",
       "kind": "heading"
      }
@@ -878,12 +869,12 @@
      "families": [
       {
        "family": "IBM Plex Sans",
-       "share": 0.94,
+       "share": 0.93,
        "mono": false
       },
       {
        "family": "IBM Plex Mono",
-       "share": 0.06,
+       "share": 0.07,
        "mono": true
       }
      ],
@@ -896,7 +887,7 @@
       18,
       24,
       30,
-      48
+      36
      ],
      "sizeCount": 8,
      "notLoaded": [],
@@ -910,30 +901,30 @@
      },
      "measureChars": 75,
      "max": {
-      "size": 48,
-      "vw": 6.3,
+      "size": 36,
+      "vw": 4.7,
       "font": "IBM Plex Sans",
-      "text": "1"
+      "text": "1.0"
      },
-     "monoShare": 0.06,
-     "monoProseShare": 0.06,
+     "monoShare": 0.07,
+     "monoProseShare": 0.07,
      "monoFamilies": [
       "IBM Plex Mono"
      ],
      "monoSamples": [
       "Scope: step_logs_20261025_103455.txt",
+      "sps",
+      "60 SPM • 1 steps",
+      "(1 SPS)",
       "00:00 (0s)",
-      "01:18 (78s total)",
-      "1x",
-      "2x",
-      "4x"
+      "01:18 (78s total)"
      ],
      "microLabels": 0,
      "microLabelShare": 0,
      "microSamples": [],
      "upperShare": 0.05,
      "centerShare": 0.16,
-     "smallText": 8
+     "smallText": 7
     },
     "eyebrows": [
      {
@@ -985,16 +976,6 @@
       "pill": false,
       "size": 14,
       "top": 537
-     },
-     {
-      "text": "Current cadence",
-      "above": "1",
-      "upper": false,
-      "tracked": false,
-      "mono": false,
-      "pill": false,
-      "size": 13,
-      "top": 1511
      }
     ],
     "numbered": [],
@@ -1092,7 +1073,7 @@
       "div.flex.flex-col 720px",
       "div.border-b.border-border 720px",
       "div.flex.flex-col 670px",
-      "div.flex.items-center 670px"
+      "div.flex.flex-wrap 670px"
      ],
      "outlinedBoxes": 13,
      "dashed": 0,
@@ -1108,7 +1089,7 @@
        "count": 3,
        "iconTopped": false,
        "rounded": true,
-       "top": 2634
+       "top": 2620
       }
      ]
     },
@@ -1135,7 +1116,7 @@
      "w": 768,
      "h": 1024
     },
-    "pageH": 2910,
+    "pageH": 2896,
     "margins": {
      "left": 24,
      "right": 49
@@ -1168,14 +1149,14 @@
       "sel": "div.group/tabs.flex",
       "tag": "div",
       "top": 671,
-      "height": 2166,
-      "words": 192,
+      "height": 2152,
+      "words": 193,
       "media": 3,
       "middle": 0,
       "heading": {
-       "text": "Second-by-second cadence",
-       "size": 16,
-       "tag": "h3"
+       "text": "1.0",
+       "size": 36,
+       "tag": "span"
       },
       "left": 24,
       "right": 49,
@@ -1246,7 +1227,7 @@
      "align": "left",
      "position": "left"
     },
-    "charts": 2,
+    "charts": 3,
     "layout": {
      "panels": 5,
      "firstScreen": 2,
@@ -1295,15 +1276,15 @@
     "numbers": {
      "cells": 0,
      "leftAligned": 0,
-     "figures": 20,
-     "tabularShare": 0.8,
-     "kpiMax": 30
+     "figures": 21,
+     "tabularShare": 0.81,
+     "kpiMax": 36
     },
     "rows": null,
     "chartHues": 4,
     "placeholders": [],
     "type": {
-     "under13": 0.19,
+     "under13": 0.14,
      "tiny": 0,
      "tinySamples": [],
      "sizes": [
@@ -1314,7 +1295,8 @@
       16,
       18,
       24,
-      30
+      30,
+      36
      ]
     },
     "title": {
@@ -1334,8 +1316,8 @@
    "filled": [
     0.9,
     0.88,
-    0.92,
-    0.93,
+    0.86,
+    0.87,
     0.81
    ],
    "motion": {
@@ -1352,9 +1334,9 @@
      "h": 844
     },
     "page": {
-     "height": 3536,
-     "screens": 4.2,
-     "words": 315,
+     "height": 3601,
+     "screens": 4.3,
+     "words": 314,
      "img": 0,
      "video": 0,
      "canvas": 0,
@@ -1505,23 +1487,23 @@
       "kind": "heading"
      },
      {
-      "text": "1",
+      "text": "1.0",
       "words": 1,
-      "chars": 1,
+      "chars": 3,
       "lines": 1,
-      "size": 36,
-      "vw": 9.2,
+      "size": 30,
+      "vw": 7.7,
       "font": "IBM Plex Sans",
       "weight": 600,
-      "tracking": 0,
-      "leading": 1.11,
+      "tracking": -0.025,
+      "leading": 1.2,
       "upper": false,
       "italic": false,
       "mono": false,
       "align": "center",
       "position": "center",
-      "widthRatio": 0.06,
-      "top": 1842,
+      "widthRatio": 0.11,
+      "top": 1958,
       "tag": "span",
       "kind": "heading"
      },
@@ -1542,7 +1524,7 @@
       "align": "center",
       "position": "left",
       "widthRatio": 0.29,
-      "top": 3092,
+      "top": 3157,
       "tag": "div",
       "kind": "heading"
      },
@@ -1563,7 +1545,7 @@
       "align": "center",
       "position": "right",
       "widthRatio": 0.29,
-      "top": 3110,
+      "top": 3175,
       "tag": "div",
       "kind": "heading"
      }
@@ -1581,12 +1563,12 @@
      "families": [
       {
        "family": "IBM Plex Sans",
-       "share": 0.94,
+       "share": 0.92,
        "mono": false
       },
       {
        "family": "IBM Plex Mono",
-       "share": 0.06,
+       "share": 0.08,
        "mono": true
       }
      ],
@@ -1599,7 +1581,7 @@
       18,
       20,
       24,
-      36
+      30
      ],
      "sizeCount": 8,
      "notLoaded": [],
@@ -1613,43 +1595,32 @@
      },
      "measureChars": 55,
      "max": {
-      "size": 36,
-      "vw": 9.2,
+      "size": 30,
+      "vw": 7.7,
       "font": "IBM Plex Sans",
-      "text": "1"
+      "text": "1.0"
      },
-     "monoShare": 0.06,
-     "monoProseShare": 0.06,
+     "monoShare": 0.08,
+     "monoProseShare": 0.08,
      "monoFamilies": [
       "IBM Plex Mono"
      ],
      "monoSamples": [
       "Scope: step_logs_20261025_103455.txt",
+      "sps",
+      "60 SPM • 1 steps",
+      "(1 SPS)",
       "00:00 (0s)",
-      "01:18 (78s total)",
-      "1x",
-      "2x",
-      "4x"
+      "01:18 (78s total)"
      ],
      "microLabels": 0,
      "microLabelShare": 0,
      "microSamples": [],
-     "upperShare": 0.04,
+     "upperShare": 0.05,
      "centerShare": 0.16,
-     "smallText": 8
+     "smallText": 7
     },
-    "eyebrows": [
-     {
-      "text": "Current cadence",
-      "above": "1",
-      "upper": false,
-      "tracked": false,
-      "mono": false,
-      "pill": false,
-      "size": 13,
-      "top": 1822
-     }
-    ],
+    "eyebrows": [],
     "numbered": [],
     "color": {
      "bodyBg": "#f9fbfc",
@@ -1682,7 +1653,7 @@
      "textColors": [
       {
        "color": "#5d5f60",
-       "share": 0.74
+       "share": 0.73
       },
       {
        "color": "#131416",
@@ -1773,7 +1744,7 @@
      "w": 390,
      "h": 844
     },
-    "pageH": 3536,
+    "pageH": 3601,
     "margins": {
      "left": 16,
      "right": 33
@@ -1848,14 +1819,14 @@
       "sel": "div.group/tabs.flex",
       "tag": "div",
       "top": 977,
-      "height": 2462,
-      "words": 192,
+      "height": 2527,
+      "words": 188,
       "media": 3,
       "middle": 0,
       "heading": {
-       "text": "Second-by-second cadence",
-       "size": 16,
-       "tag": "h3"
+       "text": "1.0",
+       "size": 30,
+       "tag": "span"
       },
       "left": 16,
       "right": 16,
@@ -1926,7 +1897,7 @@
      "align": "left",
      "position": "left"
     },
-    "charts": 2,
+    "charts": 3,
     "layout": {
      "panels": 5,
      "firstScreen": 1,
@@ -1976,15 +1947,15 @@
     "numbers": {
      "cells": 0,
      "leftAligned": 0,
-     "figures": 20,
-     "tabularShare": 0.8,
-     "kpiMax": 24
+     "figures": 21,
+     "tabularShare": 0.81,
+     "kpiMax": 30
     },
     "rows": null,
     "chartHues": 4,
     "placeholders": [],
     "type": {
-     "under13": 0.2,
+     "under13": 0.15,
      "tiny": 0,
      "tinySamples": [],
      "sizes": [
@@ -1995,7 +1966,8 @@
       16,
       18,
       20,
-      24
+      24,
+      30
      ]
     },
     "title": {
