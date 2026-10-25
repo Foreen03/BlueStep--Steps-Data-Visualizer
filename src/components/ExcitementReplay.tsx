@@ -26,7 +26,6 @@ export const ExcitementReplay: React.FC<ExcitementReplayProps> = ({
   const [isPlaying, setIsPlaying] = useState(false)
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1)
   const [soundEnabled, setSoundEnabled] = useState(false)
-  const [activeFoot, setActiveFoot] = useState<'left' | 'right' | null>(null)
   const [comboStreak, setComboStreak] = useState(0)
 
   const currentMetric = session.secondsData[currentSecond] || session.secondsData[0]
@@ -68,12 +67,6 @@ export const ExcitementReplay: React.FC<ExcitementReplayProps> = ({
       if (currentMetric.sps >= 4) {
         playOverdriveSound()
       }
-    }
-
-    if (currentMetric.sps > 0) {
-      setActiveFoot((prev) => (prev === 'left' ? 'right' : 'left'))
-    } else {
-      setActiveFoot(null)
     }
 
     if (currentMetric.sps >= 3) {
@@ -342,38 +335,66 @@ export const ExcitementReplay: React.FC<ExcitementReplayProps> = ({
             </div>
           </div>
 
-          {/* Footstep Stepping Sensor Pads */}
-          <div className="pt-2">
-            <div className="text-xs font-normal text-muted-foreground mb-2">
-              Footstep sensor telemetry
+          {/* Verified Realtime Cadence Dynamics (4 Tiles) */}
+          <div className="pt-1">
+            <div className="text-[13px] font-normal text-muted-foreground mb-2">
+              Second-by-second cadence telemetry
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              {/* Left Foot Sensor */}
-              <div
-                className={`flex flex-col items-center justify-center p-3.5 rounded-md border transition-colors ${
-                  activeFoot === 'left'
-                    ? 'border-accent bg-accent/10 text-accent font-medium'
-                    : 'border-border bg-card text-muted-foreground'
-                }`}
-              >
-                <span className="text-xs">Left foot sensor</span>
-                <span className="text-xs font-medium mt-1">
-                  {activeFoot === 'left' ? 'Active step' : 'Standby'}
-                </span>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+              {/* 1. Step Delta */}
+              <div className="rounded-md border border-border bg-card p-3">
+                <div className="text-[12px] text-muted-foreground">Step delta</div>
+                <div className="mt-1 flex items-baseline gap-1">
+                  <span className="text-xl font-semibold tabular-nums text-foreground">
+                    {currentMetric.sps}
+                  </span>
+                  <span className="text-[12px] text-muted-foreground">steps</span>
+                </div>
+                <div className="text-[11px] font-mono text-muted-foreground mt-0.5">
+                  In 1.0s window
+                </div>
               </div>
 
-              {/* Right Foot Sensor */}
-              <div
-                className={`flex flex-col items-center justify-center p-3.5 rounded-md border transition-colors ${
-                  activeFoot === 'right'
-                    ? 'border-accent bg-accent/10 text-accent font-medium'
-                    : 'border-border bg-card text-muted-foreground'
-                }`}
-              >
-                <span className="text-xs">Right foot sensor</span>
-                <span className="text-xs font-medium mt-1">
-                  {activeFoot === 'right' ? 'Active step' : 'Standby'}
-                </span>
+              {/* 2. Acceleration */}
+              <div className="rounded-md border border-border bg-card p-3">
+                <div className="text-[12px] text-muted-foreground">Acceleration</div>
+                <div className="mt-1 flex items-baseline gap-1">
+                  <span className="text-xl font-semibold tabular-nums text-foreground">
+                    {currentMetric.acceleration > 0 ? `+${currentMetric.acceleration}` : currentMetric.acceleration}
+                  </span>
+                  <span className="text-[12px] text-muted-foreground">sps/s</span>
+                </div>
+                <div className="text-[11px] text-muted-foreground mt-0.5">
+                  {currentMetric.acceleration > 0 ? 'Pace surge' : currentMetric.acceleration < 0 ? 'Deceleration' : 'Steady pace'}
+                </div>
+              </div>
+
+              {/* 3. 3s Moving Trend */}
+              <div className="rounded-md border border-border bg-card p-3">
+                <div className="text-[12px] text-muted-foreground">3s trend</div>
+                <div className="mt-1 flex items-baseline gap-1">
+                  <span className="text-xl font-semibold tabular-nums text-foreground">
+                    {currentMetric.rollingSps3s.toFixed(1)}
+                  </span>
+                  <span className="text-[12px] text-muted-foreground">sps</span>
+                </div>
+                <div className="text-[11px] font-mono text-muted-foreground mt-0.5">
+                  ~{Math.round(currentMetric.rollingSps3s * 60)} SPM
+                </div>
+              </div>
+
+              {/* 4. Cumulative Steps */}
+              <div className="rounded-md border border-border bg-card p-3">
+                <div className="text-[12px] text-muted-foreground">Total steps</div>
+                <div className="mt-1 flex items-baseline gap-1">
+                  <span className="text-xl font-semibold tabular-nums text-foreground">
+                    {currentMetric.steps.toLocaleString()}
+                  </span>
+                  <span className="text-[12px] text-muted-foreground">steps</span>
+                </div>
+                <div className="text-[11px] font-mono text-muted-foreground mt-0.5">
+                  Sensor log total
+                </div>
               </div>
             </div>
           </div>
