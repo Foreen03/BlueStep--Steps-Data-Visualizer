@@ -251,13 +251,15 @@ export const CadenceChart: React.FC<CadenceChartProps> = ({
             <ReferenceLine
               yAxisId="left"
               y={3}
-              stroke="#a86f0c"
-              strokeDasharray="4 4"
+              stroke="#7c3aed"
+              strokeDasharray="5 3"
+              strokeWidth={1.5}
               label={{
                 value: 'Sprint threshold (3 sps)',
-                fill: '#a86f0c',
-                fontSize: 11,
-                position: 'insideTopRight',
+                fill: '#7c3aed',
+                fontSize: 12,
+                fontWeight: 600,
+                position: 'insideTopLeft',
               }}
             />
 
@@ -265,13 +267,15 @@ export const CadenceChart: React.FC<CadenceChartProps> = ({
             <ReferenceLine
               yAxisId="left"
               y={session.avgSps}
-              stroke="#1b6c80"
-              strokeDasharray="2 2"
+              stroke="#059669"
+              strokeDasharray="3 3"
+              strokeWidth={1.5}
               label={{
                 value: `Avg ${session.avgSps} sps`,
-                fill: '#1b6c80',
-                fontSize: 11,
-                position: 'insideBottomRight',
+                fill: '#059669',
+                fontSize: 12,
+                fontWeight: 600,
+                position: 'insideBottomLeft',
               }}
             />
 

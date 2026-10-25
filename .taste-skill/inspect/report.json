@@ -1,6 +1,6 @@
 {
  "url": "http://localhost:5173/",
- "at": "2026-10-25T03:33:31.373Z",
+ "at": "2026-10-25T03:45:11.297Z",
  "allow": [],
  "viewports": [
   {
@@ -631,7 +631,7 @@
      "kpiMax": 36
     },
     "rows": null,
-    "chartHues": 4,
+    "chartHues": 6,
     "placeholders": [],
     "type": {
      "under13": 0.14,
@@ -654,7 +654,7 @@
      "size": 24,
      "top": 93
     },
-    "colourShare": 0.104
+    "colourShare": 0.102
    },
    "consoleErrors": []
   },
@@ -1281,7 +1281,7 @@
      "kpiMax": 36
     },
     "rows": null,
-    "chartHues": 4,
+    "chartHues": 6,
     "placeholders": [],
     "type": {
      "under13": 0.14,
@@ -1952,7 +1952,7 @@
      "kpiMax": 30
     },
     "rows": null,
-    "chartHues": 4,
+    "chartHues": 6,
     "placeholders": [],
     "type": {
      "under13": 0.15,
@@ -1987,6 +1987,17 @@
    "width": 1440,
    "message": "This page is served by a development server (Vite, webpack or Next in dev mode).",
    "fix": "Run the last gate on the production build too (vite build && vite preview, next build && next start, or the built index.html): minifiers and bundlers change the CSS a visitor receives.",
+   "alsoAt": [
+    768,
+    390
+   ]
+  },
+  {
+   "level": "WARN",
+   "id": "rainbow-chart",
+   "width": 1440,
+   "message": "The charts use 6 different hues.",
+   "fix": "Four series colours at most; prefer one accent and neutrals.",
    "alsoAt": [
     768,
     390
