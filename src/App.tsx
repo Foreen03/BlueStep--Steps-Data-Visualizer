@@ -1,12 +1,4 @@
 import { useState, useMemo } from 'react'
-import {
-  Activity,
-  Gauge,
-  PieChart,
-  TableProperties,
-  Sparkles,
-  Info,
-} from 'lucide-react'
 import { Header } from '@/components/Header'
 import { SummaryCards } from '@/components/SummaryCards'
 import { CadenceChart } from '@/components/CadenceChart'
@@ -34,7 +26,6 @@ export function App() {
       const records = parseRawLog(rawText)
       return analyzeStepSession(records, defaultPreset.title, 'step_logs_20261025_103455.txt')
     } catch {
-      // Fallback empty session
       return analyzeStepSession(
         [
           { steps: 0, timestamp: 1000 },
@@ -113,7 +104,7 @@ export function App() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+    <div className="min-h-screen bg-background text-foreground flex flex-col antialiased">
       {/* Top Header */}
       <Header
         currentSession={session}
@@ -124,66 +115,59 @@ export function App() {
         onExportJson={handleExportJson}
       />
 
-      {/* Main Container */}
+      {/* Main Sheet Container */}
       <main className="flex-1 mx-auto w-full max-w-7xl px-4 py-6 sm:px-6 space-y-6">
-        {/* Session Banner Info */}
-        <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-indigo-500/20 bg-gradient-to-r from-indigo-500/10 via-cyan-500/5 to-rose-500/10 p-4 backdrop-blur-sm">
-          <div className="flex items-center gap-3">
-            <div className="rounded-xl bg-indigo-500/20 p-2 text-indigo-500">
-              <Sparkles className="size-5" />
-            </div>
-            <div>
-              <div className="flex items-center gap-2">
-                <h2 className="text-sm sm:text-base font-bold text-foreground">
-                  {session.title}
-                </h2>
-                <span className="text-xs font-mono text-muted-foreground">
-                  ({session.fileName})
-                </span>
-              </div>
-              <p className="text-xs text-muted-foreground">
-                Processed <strong>{session.rawRecordCount.toLocaleString()}</strong> raw telemetry samples over{' '}
-                <strong>{session.durationFormatted}</strong> ({session.durationSec}s).
-              </p>
-            </div>
+        {/* Title and Screen Finding Row */}
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-baseline sm:justify-between border-b border-border pb-4">
+          <div>
+            <h1 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">
+              {session.title}
+            </h1>
+            <p className="text-[13px] text-muted-foreground mt-1 tabular-nums">
+              Session finding: Cadence averaged {session.avgSps} sps (~{Math.round(session.avgSps * 60)} SPM), peaking at {session.maxSps} sps at {session.peakTimeFormatted} ({session.durationFormatted} total, {session.rawRecordCount.toLocaleString()} telemetry samples).
+            </p>
           </div>
-
-          <div className="flex items-center gap-2">
-            <div className="text-right hidden sm:block">
-              <span className="text-[11px] text-muted-foreground block">Peak Moment</span>
-              <span className="text-xs font-bold font-mono text-rose-500">
-                {session.maxSps} SPS at {session.peakTimeFormatted}
-              </span>
-            </div>
+          <div className="text-[13px] font-mono text-muted-foreground tabular-nums">
+            Scope: {session.fileName}
           </div>
         </div>
 
-        {/* Top KPI Cards */}
+        {/* Unified KPI Row */}
         <SummaryCards session={session} />
 
         {/* View Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="bg-muted/50 p-1 rounded-xl border border-border/80">
-            <TabsTrigger value="dashboard" className="gap-2 text-xs">
-              <Activity className="size-3.5" />
-              <span>Overview & Chart</span>
-            </TabsTrigger>
-            <TabsTrigger value="replay" className="gap-2 text-xs">
-              <Gauge className="size-3.5" />
-              <span>Live Simulator</span>
-            </TabsTrigger>
-            <TabsTrigger value="breakdown" className="gap-2 text-xs">
-              <PieChart className="size-3.5" />
-              <span>Excitement Breakdown</span>
-            </TabsTrigger>
-            <TabsTrigger value="inspector" className="gap-2 text-xs">
-              <TableProperties className="size-3.5" />
-              <span>Telemetry Inspector</span>
-            </TabsTrigger>
-          </TabsList>
+          <div className="border-b border-border">
+            <TabsList className="bg-transparent p-0 h-auto gap-4 flex flex-wrap sm:flex-nowrap">
+              <TabsTrigger
+                value="dashboard"
+                className="rounded-none border-b-2 border-transparent px-2.5 py-2 text-sm font-medium data-[state=active]:border-accent data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
+              >
+                Overview
+              </TabsTrigger>
+              <TabsTrigger
+                value="replay"
+                className="rounded-none border-b-2 border-transparent px-2.5 py-2 text-sm font-medium data-[state=active]:border-accent data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
+              >
+                Replay
+              </TabsTrigger>
+              <TabsTrigger
+                value="breakdown"
+                className="rounded-none border-b-2 border-transparent px-2.5 py-2 text-sm font-medium data-[state=active]:border-accent data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
+              >
+                Breakdown
+              </TabsTrigger>
+              <TabsTrigger
+                value="inspector"
+                className="rounded-none border-b-2 border-transparent px-2.5 py-2 text-sm font-medium data-[state=active]:border-accent data-[state=active]:bg-transparent data-[state=active]:text-foreground data-[state=active]:shadow-none"
+              >
+                Telemetry
+              </TabsTrigger>
+            </TabsList>
+          </div>
 
-          {/* 1. Dashboard Tab: Cadence Chart + Replay Simulator */}
-          <TabsContent value="dashboard" className="space-y-6">
+          {/* 1. Dashboard Tab */}
+          <TabsContent value="dashboard" className="space-y-6 mt-0">
             <CadenceChart
               session={session}
               highlightedSecond={selectedSecond}
@@ -197,8 +181,8 @@ export function App() {
             <ExcitementBreakdown session={session} />
           </TabsContent>
 
-          {/* 2. Replay Simulator Dedicated Tab */}
-          <TabsContent value="replay" className="space-y-6">
+          {/* 2. Replay Simulator Tab */}
+          <TabsContent value="replay" className="space-y-6 mt-0">
             <ExcitementReplay
               session={session}
               currentSecond={selectedSecond}
@@ -211,8 +195,8 @@ export function App() {
             />
           </TabsContent>
 
-          {/* 3. Excitement Breakdown Tab */}
-          <TabsContent value="breakdown" className="space-y-6">
+          {/* 3. Cadence Breakdown Tab */}
+          <TabsContent value="breakdown" className="space-y-6 mt-0">
             <ExcitementBreakdown session={session} />
             <CadenceChart
               session={session}
@@ -222,7 +206,7 @@ export function App() {
           </TabsContent>
 
           {/* 4. Telemetry Inspector Tab */}
-          <TabsContent value="inspector" className="space-y-6">
+          <TabsContent value="inspector" className="space-y-6 mt-0">
             <LogInspectorTable
               session={session}
               onSelectSecond={(sec) => setSelectedSecond(sec)}
@@ -233,15 +217,10 @@ export function App() {
       </main>
 
       {/* Footer */}
-      <footer className="border-t border-border/60 bg-muted/20 py-6 text-center text-xs text-muted-foreground">
-        <div className="mx-auto max-w-7xl px-4 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <div className="flex items-center gap-1.5">
-            <Info className="size-3.5 text-indigo-500" />
-            <span>StepPulse • Built with React 19, Vite, shadcn UI & Tailwind CSS</span>
-          </div>
-          <div>
-            Tip: Press <kbd className="rounded border border-border bg-muted px-1.5 py-0.5 font-mono text-[10px]">D</kbd> to toggle Dark Mode
-          </div>
+      <footer className="border-t border-border bg-card/40 py-4 text-xs text-muted-foreground">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
+          <span>StepPulse telemetry engine • Precision exergaming analysis</span>
+          <span>Press D to toggle dark theme</span>
         </div>
       </footer>
 

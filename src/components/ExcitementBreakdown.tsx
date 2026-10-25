@@ -6,15 +6,6 @@ import {
   Cell,
   Tooltip,
 } from 'recharts'
-import {
-  PieChart as PieIcon,
-  Flame,
-  BatteryCharging,
-  TrendingUp,
-  Zap,
-} from 'lucide-react'
-import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
-import { Badge } from '@/components/ui/badge'
 import type { SessionAnalysis } from '@/types/stepData'
 import { EXCITEMENT_ZONES } from '@/types/stepData'
 
@@ -29,14 +20,14 @@ export const ExcitementBreakdown: React.FC<ExcitementBreakdownProps> = ({ sessio
     if (active && payload && payload.length) {
       const data = payload[0].payload
       return (
-        <div className="rounded-xl border border-border/80 bg-background/95 p-2.5 shadow-lg backdrop-blur-md text-xs">
-          <div className="font-semibold text-foreground flex items-center gap-1.5">
-            <span className="size-2.5 rounded-full" style={{ backgroundColor: data.color }} />
+        <div className="rounded-md border border-border bg-card p-2.5 shadow-md text-xs">
+          <div className="font-medium text-foreground flex items-center gap-1.5">
+            <span className="size-2 rounded-xs" style={{ backgroundColor: data.color }} />
             {data.name}
           </div>
-          <div className="mt-1 text-muted-foreground space-y-0.5">
-            <div>Duration: <strong>{data.seconds}s</strong> ({data.percentage}%)</div>
-            <div>Steps taken: <strong>{data.stepCount}</strong> steps</div>
+          <div className="mt-1 text-muted-foreground space-y-0.5 tabular-nums">
+            <div>Duration: {data.seconds}s ({data.percentage}%)</div>
+            <div>Step count: {data.stepCount} steps</div>
           </div>
         </div>
       )
@@ -44,21 +35,35 @@ export const ExcitementBreakdown: React.FC<ExcitementBreakdownProps> = ({ sessio
     return null
   }
 
+  const fatigueLabel =
+    session.fatigueTrend === 'increasing'
+      ? 'Second wind pacing'
+      : session.fatigueTrend === 'exhausted'
+      ? 'Fatigue decline'
+      : 'Balanced stamina'
+
+  const fatigueColor =
+    session.fatigueTrend === 'increasing'
+      ? 'text-accent'
+      : session.fatigueTrend === 'exhausted'
+      ? 'text-destructive'
+      : 'text-foreground'
+
   return (
     <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
       {/* 1. Excitement Zone Distribution Donut Chart (5 cols) */}
-      <Card className="border-border/80 bg-card/80 backdrop-blur-sm shadow-sm lg:col-span-5">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base flex items-center gap-2">
-            <PieIcon className="size-4 text-indigo-500" />
-            Excitement Zone Distribution
-          </CardTitle>
-          <p className="text-xs text-muted-foreground">
+      <div className="rounded-lg border border-border bg-card p-4 sm:p-6 lg:col-span-5 flex flex-col justify-between">
+        <div className="border-b border-border pb-3">
+          <h3 className="text-base font-semibold text-foreground">
+            Cadence zone distribution
+          </h3>
+          <p className="text-[13px] text-muted-foreground mt-0.5">
             Breakdown of session duration across intensity tiers
           </p>
-        </CardHeader>
-        <CardContent>
-          <div className="h-48 w-full">
+        </div>
+
+        <div className="py-2">
+          <div className="h-44 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
@@ -67,9 +72,10 @@ export const ExcitementBreakdown: React.FC<ExcitementBreakdownProps> = ({ sessio
                   nameKey="name"
                   cx="50%"
                   cy="50%"
-                  innerRadius={45}
-                  outerRadius={75}
-                  paddingAngle={3}
+                  innerRadius={46}
+                  outerRadius={72}
+                  paddingAngle={2}
+                  isAnimationActive={false}
                 >
                   {pieData.map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={entry.color} stroke="none" />
@@ -81,129 +87,103 @@ export const ExcitementBreakdown: React.FC<ExcitementBreakdownProps> = ({ sessio
           </div>
 
           {/* Zone Legend Table */}
-          <div className="mt-2 space-y-2">
+          <div className="mt-3 space-y-2 border-t border-border pt-3">
             {session.zoneSummaries.map((z) => {
               const info = EXCITEMENT_ZONES[z.zone]
               return (
-                <div key={z.zone} className="flex items-center justify-between text-xs">
+                <div key={z.zone} className="flex items-center justify-between text-[13px]">
                   <div className="flex items-center gap-2">
-                    <span className="size-2.5 rounded-full" style={{ backgroundColor: z.color }} />
+                    <span className="size-2 rounded-xs" style={{ backgroundColor: z.color }} />
                     <span className="font-medium text-foreground">{z.name}</span>
-                    <span className="text-[10px] text-muted-foreground font-mono">({info.spsRange})</span>
+                    <span className="text-muted-foreground">({info.spsRange})</span>
                   </div>
-                  <div className="flex items-center gap-3 font-mono">
+                  <div className="flex items-center gap-3 font-mono tabular-nums">
                     <span className="text-muted-foreground">{z.seconds}s</span>
-                    <span className="w-10 text-right font-semibold text-foreground">{z.percentage}%</span>
+                    <span className="w-10 text-right font-medium text-foreground">{z.percentage}%</span>
                   </div>
                 </div>
               )
             })}
           </div>
-        </CardContent>
-      </Card>
+        </div>
+      </div>
 
       {/* 2. Gamer Stamina & Fatigue Analysis (7 cols) */}
-      <Card className="border-border/80 bg-card/80 backdrop-blur-sm shadow-sm lg:col-span-7 flex flex-col justify-between">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-base flex items-center gap-2">
-            <BatteryCharging className="size-4 text-emerald-500" />
-            Gamer Stamina & Burst Dynamics
-          </CardTitle>
-          <p className="text-xs text-muted-foreground">
-            Pacing stamina across the session and sudden adrenaline rushes
-          </p>
-        </CardHeader>
+      <div className="rounded-lg border border-border bg-card p-4 sm:p-6 lg:col-span-7 flex flex-col justify-between space-y-4">
+        <div className="border-b border-border pb-3 flex items-center justify-between">
+          <div>
+            <h3 className="text-base font-semibold text-foreground">
+              Stamina and pacing dynamics
+            </h3>
+            <p className="text-[13px] text-muted-foreground mt-0.5">
+              Comparison of first half vs second half cadence and burst duration
+            </p>
+          </div>
 
-        <CardContent className="space-y-4">
-          {/* First Half vs Second Half Stamina */}
-          <div className="rounded-xl border border-border/60 bg-muted/20 p-3.5 space-y-3">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-semibold text-foreground flex items-center gap-1.5">
-                <TrendingUp className="size-4 text-indigo-500" />
-                Pacing Stamina (1st vs 2nd Half)
-              </span>
-              <Badge
-                variant="outline"
-                className={`text-[10px] font-bold ${
-                  session.fatigueTrend === 'increasing'
-                    ? 'border-emerald-500/40 text-emerald-500 bg-emerald-500/10'
-                    : session.fatigueTrend === 'exhausted'
-                    ? 'border-rose-500/40 text-rose-500 bg-rose-500/10'
-                    : 'border-cyan-500/40 text-cyan-500 bg-cyan-500/10'
-                }`}
-              >
-                {session.fatigueTrend === 'increasing'
-                  ? '⚡ SECOND WIND / SURGING'
-                  : session.fatigueTrend === 'exhausted'
-                  ? '🔻 FATIGUE DECLINE'
-                  : '⚖️ BALANCED STAMINA'}
-              </Badge>
-            </div>
+          <span className={`text-[13px] font-semibold ${fatigueColor}`}>
+            {fatigueLabel}
+          </span>
+        </div>
 
-            <div className="grid grid-cols-2 gap-3 text-center">
-              <div className="rounded-lg bg-card p-2.5 border border-border/50">
-                <span className="text-[11px] text-muted-foreground">1st Half Cadence</span>
-                <div className="text-xl font-bold text-foreground mt-0.5">
-                  {session.firstHalfAvgSps} <span className="text-xs font-normal text-muted-foreground">SPS</span>
-                </div>
+        {/* First Half vs Second Half */}
+        <div className="rounded-md border border-border bg-muted/20 p-4">
+          <div className="text-[13px] font-medium text-foreground mb-3">
+            Cadence pacing split
+          </div>
+          <div className="grid grid-cols-2 gap-3 text-center">
+            <div className="rounded-sm bg-card p-3 border border-border">
+              <div className="text-[13px] text-muted-foreground">First half cadence</div>
+              <div className="text-2xl font-semibold tabular-nums text-foreground mt-1">
+                {session.firstHalfAvgSps} <span className="text-[13px] font-normal text-muted-foreground">sps</span>
               </div>
-              <div className="rounded-lg bg-card p-2.5 border border-border/50">
-                <span className="text-[11px] text-muted-foreground">2nd Half Cadence</span>
-                <div className="text-xl font-bold text-foreground mt-0.5">
-                  {session.secondHalfAvgSps} <span className="text-xs font-normal text-muted-foreground">SPS</span>
-                </div>
+            </div>
+            <div className="rounded-sm bg-card p-3 border border-border">
+              <div className="text-[13px] text-muted-foreground">Second half cadence</div>
+              <div className="text-2xl font-semibold tabular-nums text-foreground mt-1">
+                {session.secondHalfAvgSps} <span className="text-[13px] font-normal text-muted-foreground">sps</span>
               </div>
             </div>
           </div>
+        </div>
 
-          {/* Quick Stats Grid */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-            <div className="rounded-xl border border-border/50 bg-muted/15 p-3">
-              <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                <Flame className="size-3.5 text-rose-500" />
-                Longest Burst
-              </div>
-              <div className="text-lg font-bold text-foreground mt-1">
-                {session.longestSprintSec}s
-              </div>
-              <div className="text-[10px] text-muted-foreground">at high cadence</div>
+        {/* Quick Stats Grid */}
+        <div className="grid grid-cols-3 gap-3">
+          <div className="rounded-md border border-border bg-muted/20 p-3">
+            <div className="text-[13px] text-muted-foreground">Longest burst</div>
+            <div className="text-lg font-semibold tabular-nums text-foreground mt-0.5">
+              {session.longestSprintSec}s
             </div>
-
-            <div className="rounded-xl border border-border/50 bg-muted/15 p-3">
-              <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                <Zap className="size-3.5 text-amber-500" />
-                Sprint Surges
-              </div>
-              <div className="text-lg font-bold text-foreground mt-1">
-                {session.sprintBurstCount}
-              </div>
-              <div className="text-[10px] text-muted-foreground">separate burst phases</div>
-            </div>
-
-            <div className="rounded-xl border border-border/50 bg-muted/15 p-3 col-span-2 sm:col-span-1">
-              <div className="flex items-center gap-1 text-[11px] text-muted-foreground">
-                <BatteryCharging className="size-3.5 text-cyan-500" />
-                Active Ratio
-              </div>
-              <div className="text-lg font-bold text-foreground mt-1">
-                {Math.round(
-                  ((session.durationSec -
-                    (session.zoneSummaries.find((z) => z.zone === 'rest')?.seconds || 0)) /
-                    session.durationSec) *
-                    100
-                )}%
-              </div>
-              <div className="text-[10px] text-muted-foreground">active movement</div>
-            </div>
+            <div className="text-[13px] text-muted-foreground">Continuous sprint</div>
           </div>
 
-          {/* Gamer Evaluation Summary */}
-          <div className="rounded-xl border border-indigo-500/20 bg-indigo-500/5 p-3 text-xs">
-            <strong className="text-indigo-400 font-semibold">Gamer Exertion Profile: </strong>
-            <span className="text-muted-foreground">{session.excitementTier.comment}</span>
+          <div className="rounded-md border border-border bg-muted/20 p-3">
+            <div className="text-[13px] text-muted-foreground">Sprint phases</div>
+            <div className="text-lg font-semibold tabular-nums text-foreground mt-0.5">
+              {session.sprintBurstCount}
+            </div>
+            <div className="text-[13px] text-muted-foreground">Separate bursts</div>
           </div>
-        </CardContent>
-      </Card>
+
+          <div className="rounded-md border border-border bg-muted/20 p-3">
+            <div className="text-[13px] text-muted-foreground">Active ratio</div>
+            <div className="text-lg font-semibold tabular-nums text-foreground mt-0.5">
+              {Math.round(
+                ((session.durationSec -
+                  (session.zoneSummaries.find((z) => z.zone === 'rest')?.seconds || 0)) /
+                  session.durationSec) *
+                  100
+              )}%
+            </div>
+            <div className="text-[13px] text-muted-foreground">Session uptime</div>
+          </div>
+        </div>
+
+        {/* Summary note */}
+        <div className="rounded-md border border-border bg-muted/10 p-3 text-[13px] text-muted-foreground">
+          <strong className="text-foreground font-medium">Session observation: </strong>
+          {session.excitementTier.comment}
+        </div>
+      </div>
     </div>
   )
 }

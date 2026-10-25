@@ -57,39 +57,39 @@ function getExcitementTier(avgSps: number, maxSps: number, sprintRatio: number) 
     return {
       score,
       level: 'S+',
-      title: 'GODLIKE OVERDRIVE 🔥',
-      color: '#ef4444',
+      title: 'Maximum Burst',
+      color: '#c4242a',
       badge: 'Frenzy Master',
-      comment: 'Blistering cadence! Gamer exerted elite-tier adrenaline bursts and high energy throughout.',
+      comment: 'Peak cadence sustained across high-tempo gameplay segments.',
     }
   }
   if (score >= 65) {
     return {
       score,
       level: 'A',
-      title: 'HIGH VOLTAGE ⚡',
-      color: '#f59e0b',
+      title: 'High Intensity',
+      color: '#a86f0c',
       badge: 'Sprint Specialist',
-      comment: 'Intense session with frequent sprint combos and sustained aerobic engagement.',
+      comment: 'Intense session with recurring sprint bursts and sustained engagement.',
     }
   }
   if (score >= 45) {
     return {
       score,
       level: 'B',
-      title: 'STEADY GROOVER 🎵',
-      color: '#06b6d4',
+      title: 'Steady Rhythm',
+      color: '#2f70bb',
       badge: 'Rhythm Cruiser',
-      comment: 'Solid active pacing with balanced stamina and moderate gameplay excitement.',
+      comment: 'Consistent aerobic cadence with balanced stamina pacing.',
     }
   }
   return {
     score,
     level: 'C',
-    title: 'CASUAL STRIDER 🚶',
-    color: '#10b981',
+    title: 'Casual Pacing',
+    color: '#1b6c80',
     badge: 'Light Pace',
-    comment: 'Relaxed pacing session, great for gentle warmup or exploration gameplay.',
+    comment: 'Relaxed pacing session, suitable for warmup or light exploration.',
   }
 }
 

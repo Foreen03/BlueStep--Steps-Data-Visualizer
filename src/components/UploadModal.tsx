@@ -130,9 +130,9 @@ export const UploadModal: React.FC<UploadModalProps> = ({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-lg">
-            <Upload className="size-5 text-indigo-500" />
-            Import Step Log Telemetry
+          <DialogTitle className="flex items-center gap-2 text-base">
+            <Upload className="size-4 text-accent" />
+            Import step log telemetry
           </DialogTitle>
           <DialogDescription className="text-xs text-muted-foreground">
             Upload your exercise game step logs to compute second-by-second cadence and visualize gamer excitement.
@@ -224,10 +224,10 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                   variant="ghost"
                   size="xs"
                   onClick={loadExampleSnippet}
-                  className="h-6 text-[11px] text-indigo-500 hover:text-indigo-600 gap-1"
+                  className="h-6 text-xs text-accent hover:text-accent/80 gap-1"
                 >
                   <Sparkles className="size-3" />
-                  Load Sample Snippet
+                  Load sample snippet
                 </Button>
               </div>
               <textarea
@@ -253,12 +253,12 @@ export const UploadModal: React.FC<UploadModalProps> = ({
                 <CheckCircle2 className="size-4" />
                 <span>Log parsed successfully!</span>
                 {fileName && (
-                  <Badge variant="outline" className="text-[10px] ml-auto">
+                  <Badge variant="outline" className="text-xs ml-auto">
                     {fileName}
                   </Badge>
                 )}
               </div>
-              <div className="grid grid-cols-3 gap-2 pt-1 font-mono text-muted-foreground text-[11px]">
+              <div className="grid grid-cols-3 gap-2 pt-1 font-mono text-muted-foreground text-xs">
                 <div>Samples: <strong className="text-foreground">{previewStats.count}</strong></div>
                 <div>Steps: <strong className="text-foreground">{previewStats.totalSteps}</strong></div>
                 <div>Duration: <strong className="text-foreground">{previewStats.durationSec}s</strong></div>
@@ -275,7 +275,7 @@ export const UploadModal: React.FC<UploadModalProps> = ({
             size="sm"
             disabled={!previewStats}
             onClick={handleConfirm}
-            className="bg-indigo-600 hover:bg-indigo-700 text-white"
+            className="bg-primary text-primary-foreground hover:bg-primary/90"
           >
             Load & Visualize
           </Button>
