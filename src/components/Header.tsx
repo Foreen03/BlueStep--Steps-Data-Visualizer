@@ -59,10 +59,10 @@ export const Header: React.FC<HeaderProps> = ({
           <div>
             <div className="flex items-center gap-2">
               <span className="text-base font-semibold tracking-tight text-foreground">
-                StepPulse
+                BlueStep
               </span>
               <span className="text-[13px] text-muted-foreground hidden sm:inline">
-                Cadence telemetry
+                Data Visualizer
               </span>
             </div>
             <p className="text-[13px] text-muted-foreground">

@@ -219,7 +219,7 @@ export function App() {
       {/* Footer */}
       <footer className="border-t border-border bg-card/40 py-4 text-xs text-muted-foreground">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>StepPulse telemetry engine • Precision exergaming analysis</span>
+          <span>BlueStep Data Visualizer • Precision exergaming analysis</span>
           <span>Press D to toggle dark theme</span>
         </div>
       </footer>
