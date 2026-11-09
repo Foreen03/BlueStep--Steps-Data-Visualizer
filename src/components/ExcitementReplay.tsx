@@ -19,28 +19,20 @@ interface ExcitementReplayProps {
   session: SessionAnalysis
   currentSecond: number
   onSecondChange: (second: number) => void
+  onNavigateToFrames?: () => void
 }
 
 export const ExcitementReplay: React.FC<ExcitementReplayProps> = ({
   session,
   currentSecond,
   onSecondChange,
+  onNavigateToFrames,
 }) => {
-  const [replayMode, setReplayMode] = useState<"video" | "gauge">(
-    session.hasVideo ||
-      (session.frameRecords && session.frameRecords.length > 0)
-      ? "video"
-      : "gauge"
-  )
+  const [replayMode, setReplayMode] = useState<"video" | "gauge">("gauge")
   const [prevSessionId, setPrevSessionId] = useState(session.id)
   if (prevSessionId !== session.id) {
     setPrevSessionId(session.id)
-    if (
-      session.hasVideo ||
-      (session.frameRecords && session.frameRecords.length > 0)
-    ) {
-      setReplayMode("video")
-    }
+    setReplayMode("gauge")
   }
 
   const [isPlaying, setIsPlaying] = useState(false)
@@ -227,7 +219,13 @@ export const ExcitementReplay: React.FC<ExcitementReplayProps> = ({
           {/* Mode Switcher */}
           <div className="flex items-center rounded-md border border-border bg-muted/30 p-0.5 text-xs">
             <button
-              onClick={() => setReplayMode("video")}
+              onClick={() => {
+                if (onNavigateToFrames) {
+                  onNavigateToFrames()
+                } else {
+                  setReplayMode("video")
+                }
+              }}
               className="flex items-center gap-1.5 rounded px-2.5 py-1 font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               <Film className="size-3.5" />

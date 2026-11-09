@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react"
+import { useState, useMemo, useCallback } from "react"
 import { Film } from "lucide-react"
 import { Header } from "@/components/Header"
 import { SummaryCards } from "@/components/SummaryCards"
@@ -8,6 +8,7 @@ import { GameFramePlayer } from "@/components/GameFramePlayer"
 import { ExcitementBreakdown } from "@/components/ExcitementBreakdown"
 import { LogInspectorTable } from "@/components/LogInspectorTable"
 import { UploadModal } from "@/components/UploadModal"
+import { ErrorBoundary } from "@/components/ErrorBoundary"
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs"
 import type { PresetSession } from "@/data/mockSessions"
 import { PRESET_SESSIONS } from "@/data/mockSessions"
@@ -67,6 +68,14 @@ export function App() {
   }, [])
 
   const [session, setSession] = useState<SessionAnalysis>(initialSession)
+
+  const handleSelectSecond = useCallback((sec: number) => {
+    setSelectedSecond((prev) => (prev === sec ? prev : sec))
+  }, [])
+
+  const handleNavigateToFrames = useCallback(() => {
+    setActiveTab("frames")
+  }, [])
 
   const handleSelectPreset = (preset: PresetSession) => {
     try {
@@ -236,65 +245,77 @@ export function App() {
 
           {/* 1. Dashboard Tab */}
           <TabsContent value="dashboard" className="mt-0 space-y-6">
-            <CadenceChart
-              session={session}
-              highlightedSecond={selectedSecond}
-              onSelectSecond={(sec) => setSelectedSecond(sec)}
-            />
-            <ExcitementReplay
-              session={session}
-              currentSecond={selectedSecond}
-              onSecondChange={setSelectedSecond}
-            />
-            <ExcitementBreakdown session={session} />
+            <ErrorBoundary fallbackTitle="Overview Dashboard encountered an error">
+              <CadenceChart
+                session={session}
+                highlightedSecond={selectedSecond}
+                onSelectSecond={handleSelectSecond}
+              />
+              <ExcitementReplay
+                session={session}
+                currentSecond={selectedSecond}
+                onSecondChange={handleSelectSecond}
+                onNavigateToFrames={handleNavigateToFrames}
+              />
+              <ExcitementBreakdown session={session} />
+            </ErrorBoundary>
           </TabsContent>
 
           {/* 2. Game Frames & Video Sync Tab */}
-          <TabsContent value="frames" className="mt-0 space-y-6">
-            <GameFramePlayer
-              session={session}
-              highlightedSecond={selectedSecond}
-              onSelectSecond={(sec) => setSelectedSecond(sec)}
-              onAttachVideo={handleAttachVideo}
-            />
-            <CadenceChart
-              session={session}
-              highlightedSecond={selectedSecond}
-              onSelectSecond={(sec) => setSelectedSecond(sec)}
-            />
+          <TabsContent value="frames" forceMount className="mt-0 space-y-6">
+            <ErrorBoundary fallbackTitle="Game Frame Player encountered an error">
+              <GameFramePlayer
+                session={session}
+                highlightedSecond={selectedSecond}
+                onSelectSecond={handleSelectSecond}
+                onAttachVideo={handleAttachVideo}
+              />
+              <CadenceChart
+                session={session}
+                highlightedSecond={selectedSecond}
+                onSelectSecond={handleSelectSecond}
+              />
+            </ErrorBoundary>
           </TabsContent>
 
           {/* 3. Replay Simulator Tab */}
           <TabsContent value="replay" className="mt-0 space-y-6">
-            <ExcitementReplay
-              session={session}
-              currentSecond={selectedSecond}
-              onSecondChange={setSelectedSecond}
-            />
-            <CadenceChart
-              session={session}
-              highlightedSecond={selectedSecond}
-              onSelectSecond={(sec) => setSelectedSecond(sec)}
-            />
+            <ErrorBoundary fallbackTitle="Speedometer Replay encountered an error">
+              <ExcitementReplay
+                session={session}
+                currentSecond={selectedSecond}
+                onSecondChange={handleSelectSecond}
+                onNavigateToFrames={handleNavigateToFrames}
+              />
+              <CadenceChart
+                session={session}
+                highlightedSecond={selectedSecond}
+                onSelectSecond={handleSelectSecond}
+              />
+            </ErrorBoundary>
           </TabsContent>
 
           {/* 4. Cadence Breakdown Tab */}
           <TabsContent value="breakdown" className="mt-0 space-y-6">
-            <ExcitementBreakdown session={session} />
-            <CadenceChart
-              session={session}
-              highlightedSecond={selectedSecond}
-              onSelectSecond={(sec) => setSelectedSecond(sec)}
-            />
+            <ErrorBoundary fallbackTitle="Breakdown Analysis encountered an error">
+              <ExcitementBreakdown session={session} />
+              <CadenceChart
+                session={session}
+                highlightedSecond={selectedSecond}
+                onSelectSecond={handleSelectSecond}
+              />
+            </ErrorBoundary>
           </TabsContent>
 
           {/* 5. Telemetry Inspector Tab */}
           <TabsContent value="inspector" className="mt-0 space-y-6">
-            <LogInspectorTable
-              session={session}
-              onSelectSecond={(sec) => setSelectedSecond(sec)}
-              selectedSecond={selectedSecond}
-            />
+            <ErrorBoundary fallbackTitle="Telemetry Inspector encountered an error">
+              <LogInspectorTable
+                session={session}
+                onSelectSecond={handleSelectSecond}
+                selectedSecond={selectedSecond}
+              />
+            </ErrorBoundary>
           </TabsContent>
         </Tabs>
       </main>

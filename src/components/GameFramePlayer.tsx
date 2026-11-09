@@ -45,7 +45,7 @@ export const GameFramePlayer: React.FC<GameFramePlayerProps> = ({
   // Video State
   const videoRef = useRef<HTMLVideoElement>(null)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [currentTime, setCurrentTime] = useState(0)
+  const [currentTime, setCurrentTime] = useState(highlightedSecond || 0)
   const [duration, setDuration] = useState(session.durationSec || 1)
   const [playbackSpeed, setPlaybackSpeed] = useState<number>(1)
   const [soundEnabled, setSoundEnabled] = useState(false)
@@ -63,6 +63,13 @@ export const GameFramePlayer: React.FC<GameFramePlayerProps> = ({
     null
   )
   const [showStepFlash, setShowStepFlash] = useState(false)
+
+  // Keep stable reference to onSelectSecond to prevent infinite render loops
+  const onSelectSecondRef = useRef(onSelectSecond)
+  onSelectSecondRef.current = onSelectSecond
+  const lastReportedSecondRef = useRef<number>(
+    Math.floor(highlightedSecond || 0)
+  )
 
   // Table Filters
   const [searchTerm, setSearchTerm] = useState("")
@@ -112,6 +119,23 @@ export const GameFramePlayer: React.FC<GameFramePlayerProps> = ({
     }
   }, [stepStatus, lastTriggeredStep, soundEnabled])
 
+  // Seek helper
+  const seekToTime = useCallback(
+    (timeSec: number) => {
+      const clamped = Math.max(0, Math.min(duration, timeSec))
+      setCurrentTime(clamped)
+      const video = videoRef.current
+      if (video) {
+        try {
+          video.currentTime = clamped
+        } catch (err) {
+          console.warn("Error seeking video:", err)
+        }
+      }
+    },
+    [duration]
+  )
+
   // Sync with highlightedSecond prop from parent (e.g. when user clicks on Cadence chart)
   useEffect(() => {
     if (
@@ -121,18 +145,22 @@ export const GameFramePlayer: React.FC<GameFramePlayerProps> = ({
     ) {
       const targetTime = highlightedSecond
       if (Math.abs(currentTime - targetTime) > 0.5 && targetTime <= duration) {
+        lastReportedSecondRef.current = Math.floor(targetTime)
         seekToTime(targetTime)
       }
     }
-  }, [highlightedSecond])
+  }, [highlightedSecond, duration, isPlaying, seekToTime, currentTime])
 
-  // Keep parent in sync with current second
+  // Keep parent in sync with current second, only when integer second changes
   useEffect(() => {
     const sec = Math.floor(currentTime)
-    if (onSelectSecond) {
-      onSelectSecond(sec)
+    if (sec !== lastReportedSecondRef.current) {
+      lastReportedSecondRef.current = sec
+      if (onSelectSecondRef.current) {
+        onSelectSecondRef.current(sec)
+      }
     }
-  }, [Math.floor(currentTime), onSelectSecond])
+  }, [Math.floor(currentTime)])
 
   // Video Time Update Loop using requestAnimationFrame or requestVideoFrameCallback
   useEffect(() => {
@@ -163,6 +191,13 @@ export const GameFramePlayer: React.FC<GameFramePlayerProps> = ({
       if (video.duration && !isNaN(video.duration)) {
         setDuration(video.duration)
       }
+      if (currentTime > 0) {
+        try {
+          video.currentTime = currentTime
+        } catch {
+          // ignore
+        }
+      }
       setVideoError(null)
     }
 
@@ -185,6 +220,20 @@ export const GameFramePlayer: React.FC<GameFramePlayerProps> = ({
     video.addEventListener("loadedmetadata", onLoadedMetadata)
     video.addEventListener("error", onError)
 
+    // Restore currentTime if video is already ready on mount/remount
+    if (video.readyState >= 1) {
+      if (video.duration && !isNaN(video.duration)) {
+        setDuration(video.duration)
+      }
+      if (currentTime > 0 && Math.abs(video.currentTime - currentTime) > 0.1) {
+        try {
+          video.currentTime = currentTime
+        } catch {
+          // ignore
+        }
+      }
+    }
+
     return () => {
       video.removeEventListener("play", onPlay)
       video.removeEventListener("pause", onPause)
@@ -194,18 +243,6 @@ export const GameFramePlayer: React.FC<GameFramePlayerProps> = ({
       cancelAnimationFrame(animationFrameId)
     }
   }, [localVideoUrl])
-
-  // Seek helper
-  const seekToTime = useCallback(
-    (timeSec: number) => {
-      const clamped = Math.max(0, Math.min(duration, timeSec))
-      setCurrentTime(clamped)
-      if (videoRef.current) {
-        videoRef.current.currentTime = clamped
-      }
-    },
-    [duration]
-  )
 
   // Frame Stepping Controls
   const handleStepFrames = (frames: number) => {
@@ -309,6 +346,46 @@ export const GameFramePlayer: React.FC<GameFramePlayerProps> = ({
       return () => clearInterval(t)
     }
   }, [localVideoUrl, isPlaying, fps, playbackSpeed, duration, frameDurationSec])
+
+  // Keyboard Shortcuts (Space: Play/Pause, Left/Right: Frame -1/+1, Shift+Left/Right: Prev/Next Step, J/K/L)
+  useEffect(() => {
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (
+        e.target instanceof HTMLInputElement ||
+        e.target instanceof HTMLTextAreaElement
+      ) {
+        return
+      }
+
+      if (e.code === 'Space') {
+        e.preventDefault()
+        togglePlay()
+      } else if (e.code === 'ArrowLeft') {
+        e.preventDefault()
+        if (e.shiftKey) {
+          handleJumpStep('prev')
+        } else {
+          handleStepFrames(-1)
+        }
+      } else if (e.code === 'ArrowRight') {
+        e.preventDefault()
+        if (e.shiftKey) {
+          handleJumpStep('next')
+        } else {
+          handleStepFrames(1)
+        }
+      } else if (e.key === 'j' || e.key === 'J') {
+        handleStepFrames(-5)
+      } else if (e.key === 'l' || e.key === 'L') {
+        handleStepFrames(5)
+      } else if (e.key === 'k' || e.key === 'K') {
+        togglePlay()
+      }
+    }
+
+    window.addEventListener('keydown', handleKeyDown)
+    return () => window.removeEventListener('keydown', handleKeyDown)
+  }, [currentTime, duration, isPlaying])
 
   // Filtered Game Frame Step Records for the Table
   const filteredFrameRecords = useMemo(() => {
@@ -614,15 +691,41 @@ export const GameFramePlayer: React.FC<GameFramePlayerProps> = ({
                   </span>
                 </div>
 
-                {/* Scrubber slider */}
-                <Slider
-                  value={[currentTime]}
-                  min={0}
-                  max={duration || 1}
-                  step={frameDurationSec}
-                  onValueChange={([val]) => seekToTime(val)}
-                  className="cursor-pointer"
-                />
+                {/* Scrubber slider & step density heatmap */}
+                <div className="space-y-1">
+                  <Slider
+                    value={[currentTime]}
+                    min={0}
+                    max={duration || 1}
+                    step={frameDurationSec}
+                    onValueChange={([val]) => seekToTime(val)}
+                    className="cursor-pointer"
+                  />
+                  {/* Step density tick marks track */}
+                  <div
+                    className="relative h-1.5 w-full overflow-hidden rounded-full bg-border/40"
+                    title="Timeline step distribution: vertical ticks represent controller step events"
+                  >
+                    {session.stepEvents.map((ev, idx) => {
+                      const posPercent = Math.min(
+                        100,
+                        Math.max(
+                          0,
+                          ((ev.videoTimeMs ?? ev.elapsedMs) /
+                            (duration * 1000)) *
+                            100
+                        )
+                      )
+                      return (
+                        <div
+                          key={idx}
+                          className="absolute top-0 bottom-0 w-[1.5px] bg-accent/75"
+                          style={{ left: `${posPercent}%` }}
+                        />
+                      )
+                    })}
+                  </div>
+                </div>
 
                 {/* Playback Controls & Frame Navigation Buttons */}
                 <div className="flex flex-wrap items-center justify-between gap-3 pt-2">

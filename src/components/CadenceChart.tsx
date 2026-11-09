@@ -42,9 +42,8 @@ export const CadenceChart: React.FC<CadenceChartProps> = ({
       ...d,
       opacity:
         activeZoneFilter === "all" || d.zone === activeZoneFilter ? 1 : 0.2,
-      isHighlighted: highlightedSecond === d.second,
     }))
-  }, [session.secondsData, activeZoneFilter, highlightedSecond])
+  }, [session.secondsData, activeZoneFilter])
 
   const CustomTooltip = ({
     active,
@@ -209,7 +208,7 @@ export const CadenceChart: React.FC<CadenceChartProps> = ({
 
       {/* Chart Canvas */}
       <div className="h-80 w-full sm:h-96">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={100} minHeight={100}>
           <ComposedChart
             data={chartData}
             margin={{ top: 12, right: 12, left: -16, bottom: 0 }}
@@ -317,7 +316,7 @@ export const CadenceChart: React.FC<CadenceChartProps> = ({
             >
               {chartData.map((entry, index) => {
                 const zone = EXCITEMENT_ZONES[entry.zone]
-                const isCurrent = entry.isHighlighted
+                const isCurrent = highlightedSecond === entry.second
                 return (
                   <Cell
                     key={`cell-${index}`}

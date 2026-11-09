@@ -71,7 +71,7 @@ export const ExcitementBreakdown: React.FC<ExcitementBreakdownProps> = ({
 
         <div className="py-2">
           <div className="h-44 w-full">
-            <ResponsiveContainer width="100%" height="100%">
+            <ResponsiveContainer width="100%" height="100%" minWidth={100} minHeight={100}>
               <PieChart>
                 <Pie
                   data={pieData}
