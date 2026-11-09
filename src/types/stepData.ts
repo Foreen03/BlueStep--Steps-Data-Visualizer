@@ -1,4 +1,5 @@
-export type ExcitementZoneId = 'rest' | 'warmup' | 'active' | 'sprint' | 'overdrive'
+export type ExcitementZoneId =
+  "rest" | "warmup" | "active" | "sprint" | "overdrive"
 
 export interface ExcitementZoneInfo {
   id: ExcitementZoneId
@@ -13,52 +14,52 @@ export interface ExcitementZoneInfo {
 
 export const EXCITEMENT_ZONES: Record<ExcitementZoneId, ExcitementZoneInfo> = {
   rest: {
-    id: 'rest',
-    name: 'Rest',
-    spsRange: '0 SPS',
-    color: '#94a3b8',
-    accentColor: '#64748b',
-    description: 'Idle pause or recovery',
+    id: "rest",
+    name: "Rest",
+    spsRange: "0 SPS",
+    color: "#94a3b8",
+    accentColor: "#64748b",
+    description: "Idle pause or recovery",
     minSps: 0,
     maxSps: 0.5,
   },
   warmup: {
-    id: 'warmup',
-    name: 'Warmup',
-    spsRange: '1 SPS',
-    color: '#1b6c80',
-    accentColor: '#155767',
-    description: 'Casual rhythmic stepping (~60 SPM)',
+    id: "warmup",
+    name: "Warmup",
+    spsRange: "1 SPS",
+    color: "#1b6c80",
+    accentColor: "#155767",
+    description: "Casual rhythmic stepping (~60 SPM)",
     minSps: 0.5,
     maxSps: 1.5,
   },
   active: {
-    id: 'active',
-    name: 'Active',
-    spsRange: '2 SPS',
-    color: '#2f70bb',
-    accentColor: '#245690',
-    description: 'Steady energetic stepping (~120 SPM)',
+    id: "active",
+    name: "Active",
+    spsRange: "2 SPS",
+    color: "#2f70bb",
+    accentColor: "#245690",
+    description: "Steady energetic stepping (~120 SPM)",
     minSps: 1.5,
     maxSps: 2.5,
   },
   sprint: {
-    id: 'sprint',
-    name: 'Sprint',
-    spsRange: '3 SPS',
-    color: '#a86f0c',
-    accentColor: '#8a5c0a',
-    description: 'Fast rapid steps (~180 SPM)',
+    id: "sprint",
+    name: "Sprint",
+    spsRange: "3 SPS",
+    color: "#a86f0c",
+    accentColor: "#8a5c0a",
+    description: "Fast rapid steps (~180 SPM)",
     minSps: 2.5,
     maxSps: 3.5,
   },
   overdrive: {
-    id: 'overdrive',
-    name: 'Burst',
-    spsRange: '4+ SPS',
-    color: '#c4242a',
-    accentColor: '#9f1d22',
-    description: 'Maximum exertion burst (240+ SPM)',
+    id: "overdrive",
+    name: "Burst",
+    spsRange: "4+ SPS",
+    color: "#c4242a",
+    accentColor: "#9f1d22",
+    description: "Maximum exertion burst (240+ SPM)",
     minSps: 3.5,
     maxSps: 99,
   },
@@ -67,14 +68,21 @@ export const EXCITEMENT_ZONES: Record<ExcitementZoneId, ExcitementZoneInfo> = {
 export interface RawStepRecord {
   steps: number
   timestamp: number
+  videoTimeMs?: number
+  videoTime?: string
+  frameNumber?: number
 }
 
 export interface StepEvent {
   stepNumber: number
+  stepDelta?: number
   timestamp: number
   elapsedMs: number
   deltaMs: number
   instantaneousSps: number
+  videoTimeMs?: number
+  videoTime?: string
+  frameNumber?: number
 }
 
 export interface SecondMetric {
@@ -82,6 +90,7 @@ export interface SecondMetric {
   timestamp: number
   timeFormatted: string
   steps: number
+  rawSteps?: number
   sps: number // Steps in this 1s interval
   rollingSps3s: number
   rollingSps5s: number
@@ -91,6 +100,10 @@ export interface SecondMetric {
   zoneColor: string
   excitementScore: number // 0-100 calculated intensity
   isPeak: boolean
+  videoTimeMs?: number
+  videoTime?: string
+  frameStart?: number
+  frameEnd?: number
 }
 
 export interface ZoneSummary {
@@ -100,6 +113,44 @@ export interface ZoneSummary {
   seconds: number
   percentage: number
   stepCount: number
+}
+
+export interface GameFrameStepRecord {
+  frameNumber: number
+  videoTimeMs: number
+  videoTime: string
+  stepNumber: number
+  stepDelta: number
+  cumulativeDelta: number
+  deltaMs: number
+  instantaneousSps: number
+  zone: ExcitementZoneId
+}
+
+export interface PCServerSessionMeta {
+  sessionId: string
+  title: string
+  createdTime?: number
+  hasVideo: boolean
+  hasSummary: boolean
+  hasSteps: boolean
+  hasSrt: boolean
+  videoFile: string | null
+  summaryFile: string | null
+  stepsFile: string | null
+  srtFile: string | null
+  videoUrl?: string
+  summaryUrl?: string
+  stepsUrl?: string
+  srtUrl?: string
+  durationMs?: number
+  duration?: string
+  totalRecords?: number
+  initialSteps?: number
+  finalSteps?: number
+  deltaSteps?: number
+  startTimeUtc?: string
+  endTimeUtc?: string
 }
 
 export interface SessionAnalysis {
@@ -126,9 +177,23 @@ export interface SessionAnalysis {
   sprintBurstCount: number
   firstHalfAvgSps: number
   secondHalfAvgSps: number
-  fatigueTrend: 'increasing' | 'steady' | 'exhausted'
+  fatigueTrend: "increasing" | "steady" | "exhausted"
   zoneSummaries: ZoneSummary[]
   secondsData: SecondMetric[]
   stepEvents: StepEvent[]
   rawRecordCount: number
+  // Recording & video frame compatibility fields
+  hasVideo?: boolean
+  videoUrl?: string
+  videoFileName?: string
+  fps?: number
+  sessionId?: string
+  startTimeUtc?: string
+  endTimeUtc?: string
+  startTimeMs?: number
+  endTimeMs?: number
+  initialSteps?: number
+  finalSteps?: number
+  rawRecords?: RawStepRecord[]
+  frameRecords?: GameFrameStepRecord[]
 }

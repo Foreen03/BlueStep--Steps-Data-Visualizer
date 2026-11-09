@@ -1,17 +1,19 @@
-import React from 'react'
+import React from "react"
 import {
   Upload,
   Download,
   Moon,
   Sun,
   ChevronDown,
+  Film,
   FileCode,
-} from 'lucide-react'
-import { Button } from '@/components/ui/button'
-import { useTheme } from '@/components/theme-provider'
-import type { PresetSession } from '@/data/mockSessions'
-import { PRESET_SESSIONS } from '@/data/mockSessions'
-import type { SessionAnalysis } from '@/types/stepData'
+} from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { Badge } from "@/components/ui/badge"
+import { useTheme } from "@/components/theme-provider"
+import type { PresetSession } from "@/data/mockSessions"
+import { PRESET_SESSIONS } from "@/data/mockSessions"
+import type { SessionAnalysis } from "@/types/stepData"
 
 interface HeaderProps {
   currentSession: SessionAnalysis
@@ -34,7 +36,7 @@ export const Header: React.FC<HeaderProps> = ({
   const [dropdownOpen, setDropdownOpen] = React.useState(false)
 
   const toggleTheme = () => {
-    setTheme(theme === 'dark' ? 'light' : 'dark')
+    setTheme(theme === "dark" ? "light" : "dark")
   }
 
   const activePreset = PRESET_SESSIONS.find((p) => p.id === currentPresetId)
@@ -46,7 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
         <div className="flex items-center gap-2.5">
           {/* Authentic cadence waveform logo mark */}
           <svg
-            className="size-6 text-accent shrink-0"
+            className="size-6 shrink-0 text-accent"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
@@ -61,9 +63,18 @@ export const Header: React.FC<HeaderProps> = ({
               <span className="text-base font-semibold tracking-tight text-foreground">
                 BlueStep
               </span>
-              <span className="text-[13px] text-muted-foreground hidden sm:inline">
+              <span className="hidden text-[13px] text-muted-foreground sm:inline">
                 Data Visualizer
               </span>
+              {currentSession.hasVideo && (
+                <Badge
+                  variant="default"
+                  className="hidden gap-1 bg-emerald-600/90 font-mono text-[10px] text-white md:inline-flex"
+                >
+                  <Film className="size-2.5" />
+                  <span>Video Synced</span>
+                </Badge>
+              )}
             </div>
             <p className="text-[13px] text-muted-foreground">
               Second-by-second step rate analysis and gamer excitement
@@ -81,7 +92,7 @@ export const Header: React.FC<HeaderProps> = ({
               onClick={() => setDropdownOpen(!dropdownOpen)}
               className="h-8 gap-2 border-border bg-card text-[13px] font-normal"
             >
-              <span className="max-w-[150px] truncate sm:max-w-none text-foreground">
+              <span className="max-w-[150px] truncate text-foreground sm:max-w-none">
                 {activePreset ? activePreset.title : currentSession.title}
               </span>
               <ChevronDown className="size-3.5 text-muted-foreground" />
@@ -93,7 +104,7 @@ export const Header: React.FC<HeaderProps> = ({
                   className="fixed inset-0 z-40"
                   onClick={() => setDropdownOpen(false)}
                 />
-                <div className="absolute right-0 z-50 mt-1.5 w-72 rounded-lg border border-border bg-card p-1.5 shadow-md">
+                <div className="absolute right-0 z-50 mt-1.5 w-80 rounded-lg border border-border bg-card p-1.5 shadow-md">
                   <div className="px-2.5 py-1.5 text-[13px] font-medium text-muted-foreground">
                     Select game session
                   </div>
@@ -109,13 +120,25 @@ export const Header: React.FC<HeaderProps> = ({
                           }}
                           className={`flex w-full items-start gap-2.5 rounded-md p-2 text-left text-[13px] transition-colors ${
                             isSelected
-                              ? 'bg-muted text-foreground font-medium'
-                              : 'text-foreground hover:bg-muted/60'
+                              ? "bg-muted font-medium text-foreground"
+                              : "text-foreground hover:bg-muted/60"
                           }`}
                         >
-                          <div className="flex-1 min-w-0">
-                            <div className="truncate font-medium">{preset.title}</div>
-                            <div className="text-[13px] text-muted-foreground line-clamp-1">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex items-center justify-between gap-1">
+                              <span className="truncate font-medium">
+                                {preset.title}
+                              </span>
+                              {preset.hasVideo && (
+                                <Badge
+                                  variant="outline"
+                                  className="px-1 py-0 text-[9px]"
+                                >
+                                  Video
+                                </Badge>
+                              )}
+                            </div>
+                            <div className="mt-0.5 line-clamp-1 text-[12px] text-muted-foreground">
                               {preset.description}
                             </div>
                           </div>
@@ -133,10 +156,10 @@ export const Header: React.FC<HeaderProps> = ({
             variant="default"
             size="sm"
             onClick={onOpenUpload}
-            className="h-8 gap-1.5 px-3 text-[13px] bg-primary text-primary-foreground hover:bg-primary/90"
+            className="h-8 gap-1.5 bg-primary px-3 text-[13px] text-primary-foreground hover:bg-primary/90"
           >
             <Upload className="size-3.5" />
-            <span>Load log</span>
+            <span>Load recording</span>
           </Button>
 
           {/* Export CSV */}
@@ -144,7 +167,7 @@ export const Header: React.FC<HeaderProps> = ({
             variant="outline"
             size="sm"
             onClick={onExportCsv}
-            className="h-8 px-2.5 text-[13px] gap-1.5 border-border"
+            className="h-8 gap-1.5 border-border px-2.5 text-[13px]"
           >
             <Download className="size-3.5" />
             <span className="hidden sm:inline">CSV</span>
@@ -155,7 +178,7 @@ export const Header: React.FC<HeaderProps> = ({
             variant="outline"
             size="sm"
             onClick={onExportJson}
-            className="h-8 px-2.5 text-[13px] gap-1.5 border-border"
+            className="h-8 gap-1.5 border-border px-2.5 text-[13px]"
           >
             <FileCode className="size-3.5" />
             <span className="hidden sm:inline">JSON</span>
@@ -166,10 +189,10 @@ export const Header: React.FC<HeaderProps> = ({
             variant="ghost"
             size="sm"
             onClick={toggleTheme}
-            className="h-8 px-2 text-[13px] gap-1.5 text-muted-foreground hover:text-foreground"
+            className="h-8 gap-1.5 px-2 text-[13px] text-muted-foreground hover:text-foreground"
             title="Toggle theme (Press 'D')"
           >
-            {theme === 'dark' ? (
+            {theme === "dark" ? (
               <Sun className="size-3.5" />
             ) : (
               <Moon className="size-3.5" />

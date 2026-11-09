@@ -3,14 +3,17 @@
 let audioCtx: AudioContext | null = null
 
 function getAudioContext(): AudioContext | null {
-  if (typeof window === 'undefined') return null
+  if (typeof window === "undefined") return null
   if (!audioCtx) {
-    const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+    const AudioContextClass =
+      window.AudioContext ||
+      (window as unknown as { webkitAudioContext: typeof AudioContext })
+        .webkitAudioContext
     if (AudioContextClass) {
       audioCtx = new AudioContextClass()
     }
   }
-  if (audioCtx && audioCtx.state === 'suspended') {
+  if (audioCtx && audioCtx.state === "suspended") {
     audioCtx.resume()
   }
   return audioCtx
@@ -29,7 +32,7 @@ export function playStepSound(sps: number = 2) {
 
     // Pitch shifts slightly higher at higher cadence for dynamic hype feeling!
     const baseFreq = 180 + Math.min(300, sps * 75)
-    osc.type = sps >= 3.5 ? 'triangle' : 'sine'
+    osc.type = sps >= 3.5 ? "triangle" : "sine"
     osc.frequency.setValueAtTime(baseFreq, ctx.currentTime)
     osc.frequency.exponentialRampToValueAtTime(40, ctx.currentTime + 0.08)
 
@@ -57,7 +60,7 @@ export function playOverdriveSound() {
     const osc = ctx.createOscillator()
     const gain = ctx.createGain()
 
-    osc.type = 'sawtooth'
+    osc.type = "sawtooth"
     osc.frequency.setValueAtTime(440, ctx.currentTime)
     osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.25)
 
